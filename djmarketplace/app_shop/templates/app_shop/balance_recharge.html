@@ -1,0 +1,40 @@
+{% extends 'app_shop/base.html' %}
+
+{% block main %}
+{% if messages %}
+  {% for i_message in messages %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong>Пополните баланс</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+  <h2>Пополнение баланса</h2>
+  <form method="post" action="">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit" class="btn btn-primary">Пополнить баланс</button>
+  </form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      var cardNumberInput = document.getElementById('id_card_number');
+      cardNumberInput.addEventListener('input', function() {
+          var value = this.value.replace(/\s+/g, ''); // Удаляем существующие пробелы
+          value = value.replace(/(\d{4})(?=\d)/g, '$1 '); // Добавляем пробелы каждые четыре цифры
+          this.value = value;
+      });
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+      var expirationDateInput = document.getElementById('id_expiration_date'); // разделяем месяц и год "/"
+      expirationDateInput.addEventListener('input', function() {
+          var value = this.value;
+          if (value.length === 2 && value.indexOf('/') === -1) {
+              this.value += '/';
+          }
+      });
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'app_shop/base.html' %}
+
+{% block main %}
+  <h1>Профиль</h1>
+  {% if object.profile.status_flag == 'new' %}
+    <span>Ваш текущий статус Trainee</span>
+  {% elif object.profile.status_flag == 'adv' %}
+    <span>Ваш текущий статус Advanced</span>
+  {% else %}
+    <span>Ваш текущий статус Expert</span>
+  {% endif %}
+
+
+  <form method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button class="btn btn-primary" type ="submit">Подтвердить</button>
+  </form>
+<h2>История покупок</h2>
+<div class="accordion" id="accordionExample">
+  {% for order in orders %}
+    <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        #{{order.id}} Order by {{order.date}}
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body d-flex flex-column">
+
+
+
+        {% for i_good in order.cart_product.all %}
+          <div>
+            <h4>{{i_good.good.name}}</h4>
+          </div>
+          <div>
+            <h6>Цена: {{i_good.price}}</h6>
+          </div>
+
+        {% endfor %}
+
+    <h5>Общая стоимость: {{order.amount}} Руб.</h5>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+</div>
+{% endblock %}
